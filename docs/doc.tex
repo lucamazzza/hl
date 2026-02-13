@@ -1,0 +1,265 @@
+\documentclass[11pt, a4paper]{report}
+
+% --- Language and Encoding ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% --- Fonts (Sans-serif default) ---
+\usepackage{microtype} % Improves text spacing
+
+% --- Page Layout & Margins ---
+\usepackage[a4paper, top=3.0cm, bottom=3.0cm, left=2.5cm, right=2.5cm, headheight=15pt]{geometry}
+
+% --- Headers and Footers ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % Clear all defaults
+
+% Header
+\rhead{\thepage}
+
+% Footer
+\lfoot{\footnotesize \textit{Converged Engineering Homelab}} % Project Title
+% Line thickness
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Style for Chapter pages (plain style usually suppresses headers, we override it)
+\fancypagestyle{plain}{
+\fancyhf{}
+\rhead{\thepage}
+\lfoot{\footnotesize \textit{Converged Engineering Homelab}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+}
+
+% --- Chapter/Section Titles Styling ---
+\usepackage{titlesec}
+\usepackage{color}
+
+% Chapter Format
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries} % Format
+{\chaptertitlename\ \thechapter} % Label (e.g., Capitolo 1)
+{20pt} % Separation
+{\Huge} % Title size
+
+% Section Format
+\titleformat{\section}
+{\normalfont\Large\bfseries}
+{\thesection}
+{1em}
+{}
+
+% --- Graphics & Tables ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+
+% --- Code Snippets ---
+\usepackage{minted}
+\usepackage{xcolor}
+\usemintedstyle{xcode}
+\setminted{
+bgcolor=lightgray!20,
+framesep=2mm,
+xleftmargin=10pt,
+fontsize=\small,
+}
+
+% --- Hyperlinks ---
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{fontspec}
+\setmainfont{IBM Plex Sans}
+\setmonofont{IBM Plex Mono}
+\newfontfamily\titlefont{IBM Plex Serif}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage[most]{tcolorbox}
+
+\usepackage[most]{tcolorbox}
+
+\newtcbox{\statusbubble}[1][gray]{
+  on line, 
+  arc=12pt, % Adjust for "pill" roundness
+  before upper=\strut, 
+  colback=#1!20, % Light version of the color for background
+  colframe=#1!20, % Darker version for the border
+  colupper=black!80, % This sets the text color correctly
+  boxrule=0pt, 
+  left=8pt, right=8pt, top=4pt, bottom=4pt, % Padding
+  boxsep=0pt,
+  %fontupper=\sffamily\scriptsize\bfseries % Style of the text inside
+}
+
+% Define the specific \draft command
+\newcommand{\draft}{\statusbubble[gray]{DRAFT}}
+\newcommand{\inprogress}{\statusbubble[orange]{IN PROGRESS}}
+\newcommand{\review}{\statusbubble[blue]{REVIEW}}
+\newcommand{\done}{\statusbubble[green]{DONE}}
+
+\begin{document}
+
+% --- Custom Title Page ---
+\begin{titlepage}
+\newgeometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
+
+\vspace*{2.5cm}
+
+% Title Region
+\begin{flushleft}
+\titlefont 
+    {\Huge Converged Engineering Homelab} \\[1cm]
+\end{flushleft}
+\vspace{1.2cm}
+
+\hrule height 1pt % Thicker main divider line
+\vspace{8pt} % Ensures alignment at the top
+
+% Helper command for consistent formatting
+% Usage: \field{Label}{Content}
+\newcommand{\field}[2]{%
+    \noindent{\footnotesize #1}\\[8pt] % Label (Small)
+    {\Large \textbf{#2}}\par           % Content (Large & Bold)
+}
+
+% --- ROW 1: People ---
+\noindent
+\begin{minipage}[t]{0.48\textwidth} 
+    \vspace{0pt} % Ensures alignment at the top
+    \field{Assignee(s)}{Mazza Luca}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \vspace{0pt}
+    \field{Version}{v0.0.1}
+    
+    \vspace{35pt}\hrule height 1pt\vspace{8pt} % Line separator
+    
+    \field{Committer}{-}
+    
+    \vspace{35pt}\hrule height 1pt\vspace{8pt} % Line separator
+    
+    \field{Status}{\draft}
+\end{minipage}
+
+\vspace{40pt}
+
+% --- ROW 2: Course Info ---
+\hrule height 1pt % Thicker main divider line
+\vspace{8pt}
+
+\noindent
+\begin{minipage}[t]{0.525\textwidth}
+    \vspace{0pt}
+    \field{Type}{Systems Management \& DevOps}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.6\textwidth}
+    \vspace{0pt}
+    \field{Code}{P17-001}
+\end{minipage}
+
+\vspace{35pt}
+\hrule height 1pt % Thicker main divider line
+\vspace{8pt}
+
+% --- ROW 3: Date ---
+\noindent
+\field{Year}{2025 / 2026}
+\vspace{5cm} % Space at the very bottom
+\hrule height 1pt width 0.5\textwidth % Thicker main divider line
+\vspace{8pt}
+\noindent
+\begin{minipage}[t]{\textwidth}
+    \vspace{0pt}
+    \field{Date}{30th May 2026}
+\end{minipage}
+\end{titlepage}
+\restoregeometry
+
+% --- Front Matter ---
+\tableofcontents
+\newpage
+
+% --- List of Figures/Tables (Optional) ---
+\listoffigures
+\listoftables
+\newpage
+
+% --- Abstract (As Chapter 1 in source) ---
+\chapter{Abstract}
+
+This project consolidates storage, development, and high-end gaming into a single 4U rackmount server.
+It uses Proxmox VE and PCIe Passthrough to dynamically assign hardware to virtual machines. 
+The network is managed by a low-power Gateway (Mac Mini M1) and controlled via a high-end client
+(Mac Mini M4).
+
+The grounds for this project are the need for a powerful, flexible, and efficient home lab that can handle various
+workloads without the need for multiple devices and the desire to setup and tear down environments on the fly, without 
+the need to reboot or reconfigure hardware.
+
+With this kind of infrastructure, I can easily switch between different operating systems and software configurations,
+making it ideal for development, testing, and gaming.
+Also switching between different development enviromnents through the use of containers and virtual machines, without 
+the need to reboot or reconfigure hardware, is a key feature of this project.
+
+\vspace{1cm}
+\noindent\rule{\textwidth}{0.5pt}
+\vspace{1cm}
+
+% --- Content ---
+\chapter{Introduction}
+
+\section{Bill of Materials}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lp{8cm}l@{}}
+\toprule
+\textbf{Category} & \textbf{Description} & \textbf{Notes} \\ \midrule
+Chassis & Lanberg SC01-5204-12B & 4U Rackmount Case\\
+CPU & Ryzen 7 7700 & 65W TDP and iGPU\\
+R-04 & X & \\ 
+\bottomrule
+\end{tabular}
+    \caption{Server Components}
+\end{table}
+
+
+
+
+\section{Requisiti}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lp{8cm}l@{}}
+\toprule
+\textbf{ID} & \textbf{Descrizione} & \textbf{Note} \\ \midrule
+R-01 & X & \\
+R-02 & X & \\
+R-04 & X & \\ 
+\bottomrule
+\end{tabular}
+\caption{Requisiti del progetto}
+\end{table}
+
+\chapter{Design e implementazione}
+\section{API}
+Di seguito è riportato un esempio di codice per l'inizializzazione.
+
+\begin{minted}{cpp}
+// Esempio di inizializzazione
+float x = 0.5f;
+std::vector<float> input = {x, x, x}; // Input per il modello
+// Altri parametri...
+\end{minted}
+
+\chapter{Conclusioni}
+
+\end{document}
