@@ -10,5 +10,8 @@ What is it?
 > [!NOTE]
 > TODO Readme
 
+> [!WARNING]
+> This project is paused due to the high price or RAM
+
 Documentation
 -------------
