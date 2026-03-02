@@ -13,5 +13,18 @@ What is it?
 > [!WARNING]
 > This project is paused due to the high price or RAM
 
+- [x] GPU
+- [x] CPU
+- [x] Motherboard
+- [x] PSU
+- [x] Cooler
+- [ ] Case
+- [ ] Rack
+- [x] Switch
+- [ ] Fans
+- [ ] SSD
+- [ ] HDD
+- [ ] RAM
+
 Documentation
 -------------
