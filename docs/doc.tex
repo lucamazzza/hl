@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper]{report}
+\documentclass[a4paper, 11pt, twoside]{report}
 
 % --- Language and Encoding ---
 \usepackage[utf8]{inputenc}
@@ -9,12 +9,31 @@
 \usepackage{microtype} % Improves text spacing
 
 % --- Page Layout & Margins ---
-\usepackage[a4paper, top=3.0cm, bottom=3.0cm, left=2.5cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage[
+    a4paper,
+    top=3.0cm,
+    bottom=3.0cm,
+    inner=2.5cm,      % Big margin for binding (Left on Odd, Right on Even)
+    outer=2.5cm,      % Standard margin for edge (Right on Odd, Left on Even)
+    bindingoffset=1cm,% Extra 1cm added purely for the binding side
+    headheight=15pt
+]{geometry}
 
 % --- Headers and Footers ---
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{} % Clear all defaults
+
+\setlength{\headheight}{15pt} % Fix warning about header height
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}                % Clear all defaults
+\newcommand{\blankpage}{
+    \clearpage
+    \thispagestyle{empty} % No headers/footers
+    \hbox{}               % Invisible content
+    \newpage
+}
 
 % Header
 \rhead{\thepage}
@@ -24,14 +43,23 @@
 % Line thickness
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 
 % Style for Chapter pages (plain style usually suppresses headers, we override it)
-\fancypagestyle{plain}{
-\fancyhf{}
-\rhead{\thepage}
-\lfoot{\footnotesize \textit{Converged Engineering Homelab}}
+\fancyhead[LO]{\texttt{Mazluc}} % Left on Odd
+\fancyhead[RO, LE]{\thepage}                                               % Right on Odd
+\fancyhead[RE]{\nouppercase{\leftmark}}
+\fancyfoot[LO, RE]{\footnotesize \textit{Converged Engineering Homelab}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
+\fancypagestyle{plain}{
+    \fancyhf{} % Clear defaults
+    \fancyhead[LO]{\texttt{Mazluc}}
+    \fancyhead[RO, LE]{\thepage}
+    \fancyhead[RE]{\nouppercase{\leftmark}} 
+    \fancyfoot[LO, RE]{\footnotesize \textit{Converged Engineering Homelab}}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.4pt}
 }
 
 % --- Chapter/Section Titles Styling ---
@@ -54,6 +82,7 @@
 
 % --- Graphics & Tables ---
 \usepackage{graphicx}
+\usepackage[most]{tcolorbox}
 \usepackage{booktabs}
 \usepackage{array}
 
@@ -81,8 +110,15 @@ fontsize=\small,
 \usepackage{geometry}
 \geometry{margin=2.5cm}
 
-\usepackage[most]{tcolorbox}
+% Bibliography
+\usepackage{csquotes}
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{bibliography.bib}
 
+% Glossary
+\usepackage[toc]{glossaries}
+\makeglossaries
+\loadglsentries{glossary.tex}
 \usepackage[most]{tcolorbox}
 
 \newtcbox{\statusbubble}[1][gray]{
@@ -108,6 +144,7 @@ fontsize=\small,
 
 % --- Custom Title Page ---
 \begin{titlepage}
+\pagenumbering{alph}
 \newgeometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
 
 \vspace*{2.5cm}
@@ -179,21 +216,27 @@ fontsize=\small,
 \noindent
 \begin{minipage}[t]{\textwidth}
     \vspace{0pt}
-    \field{Date}{30th May 2026}
+    \field{Date}{\today}
 \end{minipage}
 \end{titlepage}
 \restoregeometry
 
-% --- Front Matter ---
+\blankpage
+
+% Front Matter
+\pagenumbering{roman}
 \tableofcontents
 \newpage
 
-% --- List of Figures/Tables (Optional) ---
+% List of Figures/Tables (Optional)
 \listoffigures
 \listoftables
 \newpage
 
+\blankpage
+
 % --- Abstract (As Chapter 1 in source) ---
+\pagenumbering{arabic}
 \chapter{Abstract}
 
 This project consolidates storage, development, and high-end gaming into a single 4U rackmount server.
@@ -201,7 +244,7 @@ It uses Proxmox VE and PCIe Passthrough to dynamically assign hardware to virtua
 The network is managed by a low-power Gateway (Mac Mini M1) and controlled via a high-end client
 (Mac Mini M4).
 
-The grounds for this project are the need for a powerful, flexible, and efficient home lab that can handle various
+The grounds for this project are the need for a powerful, flexible, and efficient \gls{homelab} that can handle various
 workloads without the need for multiple devices and the desire to setup and tear down environments on the fly, without 
 the need to reboot or reconfigure hardware.
 
@@ -230,11 +273,11 @@ fully functional, so they are a crucial part of the project.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}lp{7cm}rp{4cm}l@{}}
+\begin{tabular}{@{}lp{6cm}rp{4cm}l@{}}
 \toprule
 \textbf{Category} & \textbf{Description} & \textbf{Price} & \textbf{Notes} \\ \midrule
 Chassis      & Lanberg SC01-5204-12B   & 129.— & 4U Rackmount Case\\
-CPU          & Ryzen 7 7700            & 220.— & 65W TDP and iGPU\\
+CPU          & Ryzen 9 7900            & 260.— & 65W TDP and iGPU\\
 GPU          & nVidia RTX 5070         & 575.— & PNY\\
 Motherboard  & AsRock B850 LiveMixer   & 164.— & AM5, ATX\\
 RAM          & Crucial Pro             & 629.— & 64GB 5600MHz DDR5\\
@@ -249,41 +292,46 @@ Switch       & Aruba 2530-48G-PoE+ (U) & 400.— & 48-Port PoE+ Switch\\
 Cables       & Various                 &  50.— & Ethernet, Power, etc.\\
 Misc         & Miscellaneous           &  50.— & HDMI Dummy, Screws\\
 \midrule
-\textbf{Total} &  & \textbf{3528.—} & \\
+\textbf{Total} &  & \textbf{3568.—} & \\
 \bottomrule
 \end{tabular}
-    \caption{Rack Components}
+    \caption{Rack Components \cite{galaxus}}
 \end{table}
 
 These are the materials used to build the core rack of the project, any other material (i.e. peripherals, consoles, 
 etc...) are not crucial to the project and are not listed here. Any peripheral with a network interface can be used with
 the rack, as long as it supports the necessary protocols and standards.
 
-\section{Requisiti}
+\section{Requirements}
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}lp{8cm}l@{}}
+\begin{tabular}{@{}lp{10cm}l@{}}
 \toprule
-\textbf{ID} & \textbf{Descrizione} & \textbf{Note} \\ \midrule
-R-01 & X & \\
-R-02 & X & \\
-R-04 & X & \\ 
+\textbf{ID} & \textbf{Description} & \textbf{Notes} \\ \midrule
+\texttt{R-00} & Need an hypervisor to host multiple VMs & Proxmox\\
+\texttt{R-01} & Need a reverse proxy to route to the right service securely (\texttt{gitea.local}, ecc...) & nginx\\
+\texttt{R-02} & Need a container manager to provision/manage/destroy isolated dev containers & docker, lazydocker\\
+\texttt{R-03} & Need a version control service to manage repositories \& version control & Gitea, tea\\
+\texttt{R-04} & Need a CI/CD Runner service to test code, package docker images on triggers & Gitea actions\\
+\texttt{R-05} & Need an image storage local to the server, to pull images quickly and securely & Docker registry\\
+\texttt{R-06} & Need a docker container to host a window manager to be accessed via browser  & webtop\\
 \bottomrule
 \end{tabular}
-\caption{Requisiti del progetto}
+\caption{Requirements of the system}
 \end{table}
 
-\chapter{Design e implementazione}
-\section{API}
-Di seguito è riportato un esempio di codice per l'inizializzazione.
-
 \begin{minted}{cpp}
-// Esempio di inizializzazione
 float x = 0.5f;
 std::vector<float> input = {x, x, x}; // Input per il modello
-// Altri parametri...
 \end{minted}
 
-\chapter{Conclusioni}
+\chapter{Conclusions}
+
+\blankpage
+\pagenumbering{Roman}
+\printglossary[title=Glossary, toctitle=Glossary]
+
+\blankpage
+\printbibliography[heading=bibintoc, title=Sitography]
 
 \end{document}
