@@ -25,6 +25,8 @@ What is it?
 - [ ] SSD
 - [ ] HDD
 - [ ] RAM
+- [x] Network Switch
+- [x] Mac Mini (git Server)
 
 Documentation
 -------------
