@@ -11,7 +11,7 @@ What is it?
 > TODO Readme
 
 > [!WARNING]
-> This project is paused due to the high price or RAM
+> This project is paused due to the high price or RAM & to me moving in the next months
 
 - [x] GPU
 - [x] CPU
